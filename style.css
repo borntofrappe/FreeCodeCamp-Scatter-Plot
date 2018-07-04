@@ -1,0 +1,159 @@
+@import url("https://fonts.googleapis.com/css?family=Lato");
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+body {
+  min-height: 100vh;
+  width: 100%;
+  font-family: 'Lato', sans-serif;
+  color: #eee;
+  background: #252525;
+}
+
+.container {
+  /* set the size of the container 
+  as the SVG defines only the viewbox attribute, the width spreads to fit the container's width
+  the height is also defined by the viewbox itself, to preserve the width to height ratio */
+  width: 85vw;
+  padding: 1rem;
+  margin: 2rem auto;
+  color: #252525;
+  background: #eee;
+  box-shadow: 6px 8px 0 #252525, 14px 14px 0 #eee;
+  /* include a simple animation which introduces the card from the bottom of the screen */
+  animation: introduceCard 1s cubic-bezier(.22,-0.3,.68,1.44) both;
+  position: relative;
+}
+.container h1#title {
+  font-size: 2.5rem;
+  text-transform: capitalize;
+  text-align: center;
+  margin: 1rem;
+  /* include a simple animation which introduces the title from the top of the screen, right before the card has finished animating  */
+  animation: introduceElement 0.5s 0.8s cubic-bezier(.22,-0.3,.68,1.44) both;
+}
+
+.container svg {
+  /* include a simple animation which introduces the svg from the top of the screen, right just a trifle following the title animation  */
+  animation: introduceElement 0.4s 0.9s cubic-bezier(.22,-0.3,.68,1.44) both;
+}
+.container svg text {
+  /* change the font for the ticks of the axes */
+  font-family: 'Lato', sans-serif;
+  font-weight: bold;
+}
+.container svg .dot {
+  /* change the opacity of the fill on hover */
+  opacity: 0.7;
+  transition: opacity 0.2s ease-out;
+}
+.container svg .dot:hover {
+  opacity: 1;
+}
+
+.container div#tooltip {
+  /* absolute position the div used as tooltip
+  the left and bottom properties are set in the JS script, to move the element right next to the data point it ought to represent */
+  position: absolute;
+  border-radius: 4px;
+  color: #eee;
+  background: #252525;
+  padding: 1rem 2rem;
+  font-size: 1.5rem;
+  /* pointer-events set to none as to avoid hovering on the tooltip and preventing the hover state on the circle elements behind it */
+  pointer-events: none;
+  /* set opacity to 0 and change it to 1 on hover */
+  opacity: 0;
+  /* transition to smoothen the change in opacity  */
+  transition: opacity 0.2s ease-out;
+}
+
+.container div#legend {
+  /* position absolute to position the legend in the right section of the container (which has position relative and functions as anchor) */
+  position: absolute;
+  right: 2rem;
+  /* style similar to the tooltip, but with a translucent background */
+  border-radius: 4px;
+  color: #252525;
+  background: rgba(37, 37, 37, 0.2);
+  padding: 1rem 2rem;
+  line-height: 2;
+  /* animation to introduce the element a smidge after the title animation */
+  animation: introduceElement 0.5s 0.85s cubic-bezier(.22,-0.3,.68,1.44) both;
+}
+.container div#legend ul li {
+  /* capitalize the legend's items */
+  text-transform: capitalize;
+  /* remove the bullet points */
+  list-style: none;
+  /* position relative to absolute position a pseudo-element, which is used to create a visual reference to the dots on the scatter plot */
+  position: relative;
+  
+}
+.container div#legend ul li:before {
+  /* absolute position a circle right to the left of the list items */
+  content: '';
+  position: absolute;
+  top: calc(50% - 5px);
+  left: -20px;
+  height: 10px;
+  width: 10px;
+  border-radius: 50%;
+}
+/* change the background of the pseudo element to match the different list items to the dots in the scatter plot */
+.container div#legend ul li:nth-of-type(1):before {
+  background: #E94180;
+}
+.container div#legend ul li:nth-of-type(2):before {
+  background: #163D90;
+}
+
+/* define the animations to introduce page's contents
+the card is animated bottom up
+the elements (title, legend, svg) are animated top down  
+*/
+
+@keyframes introduceCard {
+  0% {
+    transform: translateY(100vh);
+    opacity: 0;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes introduceElement {
+  0% {
+    transform: translateY(-20vh);
+    opacity: 0;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+/* on smaller screen sizes
+- reduce the font-size of the header and of the tooltip
+- hide the legend, which would otherwise overalp the scatter plot data */
+@media (max-width: 700px) {
+  .container h1#title {
+    font-size: 1.8rem;
+  }
+  .container div#tooltip {
+    font-size: 1rem;
+  }
+  .container div#legend {
+    display: none;
+  }
+}
